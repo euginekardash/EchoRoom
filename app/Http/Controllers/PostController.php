@@ -9,11 +9,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('is_published', 0)->get(); //get получает все данные в виде коллекций 
-        foreach ($posts as $post) {
-            dump($post->title); //красивый метод вывода без остановки скрипта
-        }
-        dd('end'); //остонавливает скрипт и красивы выводит данные 
+        $posts = Post::all();
+        
+        return view('posts', compact('posts')); //compact - передаем переменные во вью
     }
 
     public function create()
