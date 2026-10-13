@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'posts'; //хороший тон прописывать название таблицы
     protected $guarded = false; //разрешает добавление в бд 
 }
