@@ -35,14 +35,15 @@ class PostController extends Controller
             ],
         ];
 
-        foreach($postsArr as $item){
+        foreach ($postsArr as $item) {
             Post::create($item);
         }
 
         dd('created');
     }
 
-    public function update(){
+    public function update()
+    {
         $post = Post::find(6);
         $post->update([
             'title' => 'updated'
@@ -50,9 +51,56 @@ class PostController extends Controller
         dd('updated');
     }
 
-    public function delete(){
+    public function delete()
+    {
         $post = Post::find(2);
         $post->delete();
         dd('deleted');
+    }
+
+    public function firstOrCreate()
+    {
+        $post = Post::find(1);
+        $anotherPost = [
+            'title' => 'some title',
+            'content' => 'some content',
+            'image' => 'some_iamge.jpg',
+            'likes' => 250,
+            'is_published' => 1,
+        ];
+        $post = Post::firstOrCreate(
+            ['title' => 'some title'], //ключи на проверку совпадений 
+            [                          //если не находит то создает
+                'title' => 'some title',
+                'content' => 'some content',
+                'image' => 'some_iamge.jpg',
+                'likes' => 250,
+                'is_published' => 1,
+            ]
+        );
+        dump($post->content);
+        dd('end');
+    }
+
+    public function updateOrCreate()
+    {
+        $anotherPost = [
+            'title' => 'updateorcreate some title',
+            'content' => 'updateorcreate some content',
+            'image' => 'updateorcreate some_iamge.jpg',
+            'likes' => 250,
+            'is_published' => 0,
+        ];
+
+        $post = Post::updateOrCreate([
+            'title' => 'updateorcreate some title',
+        ], [
+            'title' => 'updateorcreate some title',
+            'content' => 'updateorcreate some content',
+            'image' => 'updateorcreate some_iamge.jpg',
+            'likes' => 250,
+            'is_published' => 0,
+        ]);
+        dd('end');
     }
 }
