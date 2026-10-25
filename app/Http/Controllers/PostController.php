@@ -11,33 +11,26 @@ class PostController extends Controller
     {
         $posts = Post::all();
         
-        return view('posts', compact('posts')); //compact - передаем переменные во вью
+        return view('post.index', compact('posts')); //compact - передаем переменные во вью
     }
 
     public function create()
     {
-        $postsArr = [
-            [
-                'title' => 'very int title',
-                'content' => 'big content',
-                'image' => 'iamge.jpg',
-                'likes' => 15,
-                'is_published' => 1,
-            ],
-            [
-                'title' => 'another very int title',
-                'content' => 'another big content',
-                'image' => 'another_iamge.jpg',
-                'likes' => 25,
-                'is_published' => 1,
-            ],
-        ];
+        return view('post.create', );
+    }
 
-        foreach ($postsArr as $item) {
-            Post::create($item);
-        }
+    public function store(){
+        $data = request()->validate([
+            'title' => 'string',
+            'content' => 'string',
+            'image' => 'string',
+        ]);
+        Post::create($data);
+        return redirect()->route('post.index');
+    }
 
-        dd('created');
+    public function show(Post $post){
+        return view('post.show', compact('post'));
     }
 
     public function update()
