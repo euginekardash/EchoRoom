@@ -11,4 +11,8 @@ class Post extends Model
 
     protected $table = 'posts'; //хороший тон прописывать название таблицы
     protected $guarded = false; //разрешает добавление в бд 
+
+    public function category(){
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
 }
