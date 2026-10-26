@@ -5,6 +5,16 @@
         <div>{{$post -> content}}</div>
 </div>
 <div>
-    <a href="{{route()}}"></a>
+    <a href="{{route('post.edit', $post->id)}}">Edit</a>
+</div>
+<div>
+    <form action="{{route('post.delete', $post->id)}}" method="POST">
+        @csrf
+        @method('delete')
+        <input type="submit" value="Delete">
+    </form>
+</div>
+<div>
+    <a href="{{route('post.index')}}">Back</a>
 </div>
 @endsection 
