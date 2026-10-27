@@ -47,6 +47,24 @@
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
+            <div class="mb-5">
+                <label for="tags" class="block text-sm font-medium text-gray-700 mb-2">
+                    Tags
+                </label>
+                <select id="tags" name="tags[]" multiple size="5"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white">
+                    @foreach ($tags as $tag)
+                        <option value="{{ $tag->id }}"
+                            {{ in_array($tag->id, old('tags', $post->tags->pluck('id')->toArray())) ? 'selected' : '' }}>
+                            {{ $tag->title }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="mt-1 text-xs text-gray-500">Hold Ctrl (Cmd on Mac) to select multiple</p>
+                @error('tags')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
             <button type="submit"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-md transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Update
