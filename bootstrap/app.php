@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->validateCsrfTokens(except: [
+        'posts',        // Исключит POST /posts
+        'posts/*',      // Исключит все вложенные маршруты
+        'api/*',        // Если тестируете API
+    ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

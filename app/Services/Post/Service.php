@@ -13,6 +13,8 @@ class Service{
 
         $post->tags()->attach($tags);
 
+        return $post;//for front
+
     }
     public function update($post, $data){
         $tags = $data['tags'];
@@ -20,5 +22,7 @@ class Service{
 
         $post->update($data);
         $post->tags()->sync($tags);
+        
+        return $post->fresh(); //for front
     }
 }
