@@ -10,9 +10,9 @@
             <p class="text-gray-600">Browse our latest published posts.</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('post.index') }}" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900 font-medium transition-colors">
+            {{-- <a href="{{ route('post.index') }}" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-gray-900 font-medium transition-colors">
                 Reset filters
-            </a>
+            </a> --}}
             <a href="{{ route('post.create') }}"
                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,25 +29,26 @@
     <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-4 items-end">
         <div class="flex-1">
             <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Search</label>
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by title or content..."
-                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
-        </div>
-        <div class="flex-1">
-            <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Category</label>
-            <select name="category" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-gray-50">
-                <option value="">All categories</option>
-                @foreach (\App\Models\Category::all() as $category)
-                    <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
+            <div class="relative">
+                <input type="text" name="title" value="{{ request('title') }}"
+                    placeholder="Search by title or content..."
+                    class="w-full px-4 py-2.5 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                @if (request()->filled('title'))
+                    <a href="{{ route('post.index', request()->except('title', 'page')) }}"
+                       class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-700 transition-colors"
+                       title="Clear search">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </a>
+                @endif
+            </div>
         </div>
         <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            Filter
+            Search
         </button>
     </div>
 </form>

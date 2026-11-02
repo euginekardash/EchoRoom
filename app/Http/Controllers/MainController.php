@@ -10,6 +10,7 @@ class MainController extends Controller
     public function index()
     {
         $posts = Post::where('is_published', true)
+            ->where('image', 'like', 'http%')
             ->latest()
             ->take(6)
             ->with('category')
