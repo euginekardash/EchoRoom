@@ -15,6 +15,9 @@ class MainController extends Controller
             ->with('category')
             ->get();
 
-        return view('main', compact('posts'));
+        $allPosts = Post::where('is_published', true)
+            ->get();
+
+        return view('main', compact('posts','allPosts'));
     }
 }
