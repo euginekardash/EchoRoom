@@ -9,6 +9,12 @@ class MainController extends Controller
 {
     public function index()
     {
-        return view('main'); 
+        $posts = Post::where('is_published', true)
+            ->latest()
+            ->take(6)
+            ->with('category')
+            ->get();
+
+        return view('main', compact('posts'));
     }
 }
