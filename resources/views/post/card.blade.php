@@ -41,14 +41,5 @@
             <a href="{{ route('post.show', $post) }}">{{ $post->title }}</a>
         </h2>
         <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ str($post->content)->limit(140) }}</p>
-        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-            <a href="{{ route('post.show', $post) }}"
-                class="text-blue-600 font-semibold text-sm hover:text-blue-700 inline-flex items-center gap-1">
-                Read more <span>→</span>
-            </a>
-            <a href="{{ route('post.show', $post) }}#comments" class="text-gray-400 hover:text-gray-600 text-sm">
-                Comments
-            </a>
-        </div>
     </div>
 </article>
