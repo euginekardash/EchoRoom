@@ -3,22 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index()
     {
-        $posts = Post::where('is_published', true)
-            ->where('image', 'like', 'http%')
-            ->latest()
-            ->take(6)
-            ->with('category')
+        // $posts = Post::query()
+        //     ->where('is_published', true)
+        //     ->with('category')
+        //     ->withCount('likes')
+        //     ->latest()
+        //     ->limit(8)              // на главной показываем 8 последних
+        //     ->get();
+
+        $allPosts = Post::query()
+            ->where('is_published', true)
+            ->withCount('likes')    // нужен likes_count для sum()
             ->get();
 
-        $allPosts = Post::where('is_published', true)
-            ->get();
-
-        return view('main', compact('posts','allPosts'));
+        return view('main', compact('allPosts'));
     }
 }

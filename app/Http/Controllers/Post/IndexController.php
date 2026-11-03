@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Post;
 
-use App\Http\Controllers\Controller;
 use App\Http\Filters\PostFilter;
 use App\Http\Requests\Post\FilterRequest;
-use App\Http\Resources\Post\PostResource;
 use App\Models\Post;
 
 class IndexController extends BaseController
@@ -14,14 +12,17 @@ class IndexController extends BaseController
     {
         $data = $request->validated();
 
-        $page = $data['page'] ?? 1;
-        $perPage = $data['per_page'] ?? 10;
+        $page    = $data['page'] ?? 1;
+        $perPage = $data['per_page'] ?? 12;
 
-        $filter= app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
-        $posts = Post::filter($filter)->with('category')->paginate($perPage, ['*'], 'page', $page);
+        $filter = app()->make(PostFilter::class, ['queryParams' => array_filter($data)]);
 
-        //return PostResource::collection($posts); //for frontend
+        $posts = Post::filter($filter)
+            ->where('is_published', true)
+            ->with('category')
+            ->withCount('likes')
+            ->paginate($perPage, ['*'], 'page', $page);
 
-        return view('post.index', compact('posts')); //compact - передаем переменные во вью
+        return view('post.index', compact('posts'));
     }
 }

@@ -6,21 +6,47 @@ use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
-    use HasFactory;
-    use Filterable;
-    use SoftDeletes;
+    use SoftDeletes, HasFactory, Filterable;
 
-    protected $table = 'posts'; //хороший тон прописывать название таблицы
-    protected $guarded = false; //разрешает добавление в бд 
+    protected $fillable = ['title', 'content', 'image', 'is_published', 'category_id'];
 
-    public function category(){
-        return $this->belongsTo(Category::class, 'category_id', 'id');
+    protected $casts = ['is_published' => 'boolean'];
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
-    public function tags(){
-        return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags')->withTimestamps();
+    }
+
+    public function likes(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'post_likes')->withTimestamps();
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->oldest();
+    }
+
+    public function allComments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function isLikedBy(?User $user): bool
+    {
+        return $user
+            ? $this->likes()->whereKey($user->id)->exists()
+            : false;
     }
 }
