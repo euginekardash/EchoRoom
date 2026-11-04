@@ -24,32 +24,29 @@
     </div>
 </div>
 
-<!-- Filters / Search -->
-<form method="GET" action="{{ route('post.index') }}" class="max-w-2xl mx-auto mb-8">
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-4 items-end">
-        <div class="flex-1">
-            <label class="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Search</label>
-            <div class="relative">
-                <input type="text" name="title" value="{{ request('title') }}"
-                    placeholder="Search by title or content..."
-                    class="w-full px-4 py-2.5 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
-                @if (request()->filled('title'))
-                    <a href="{{ route('post.index', request()->except('title', 'page')) }}"
-                       class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-700 transition-colors"
-                       title="Clear search">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </a>
-                @endif
-            </div>
-        </div>
-        <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all flex items-center gap-2">
+<!-- Search -->
+<form method="GET" action="{{ route('post.index') }}" class="max-w-4xl mx-auto mb-8">
+    <div class="relative bg-white rounded-2xl shadow-sm border border-gray-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 transition-all">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            Search
-        </button>
+        </div>
+
+        <input type="text" name="title" value="{{ request('title') }}"
+               placeholder="Search by title or content..."
+               class="w-full pl-12 pr-24 py-3.5 bg-transparent border-0 rounded-2xl text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none">
+
+        @if (request()->filled('title'))
+            <a href="{{ route('post.index', request()->except('title', 'page')) }}"
+               class="absolute inset-y-0 right-2 flex items-center pr-3 text-gray-400 hover:text-gray-700 transition-colors"
+               title="Clear search">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </a>
+        @endif
     </div>
 </form>
 
