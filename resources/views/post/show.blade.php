@@ -54,26 +54,21 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <time class="text-xs text-gray-500 font-medium">{{ $post->created_at->format('M d, Y') }}</time>
-
-                    <button type="button"
-                        class="flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-red-500 transition-colors">
-                        <svg class="w-4 h-4 fill-none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </button>
+                    <time class="text-xs text-gray-500 font-medium">
+                        {{ $post->created_at->format('M d, Y') }}
+                    </time>
+                    @include('post.partials.like-button', ['post' => $post, 'size' => 'md'])
                 </div>
             </div>
 
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight line-clamp-2 break-words" title="{{ $post->title }}">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight line-clamp-2 break-words"
+                title="{{ $post->title }}">
                 {{ $post->title }}
             </h1>
         </header>
 
         <!-- Content -->
         <div class="p-8">
-            <!-- Измененный контент -->
             <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-line break-words">
                 {{ $post->content }}
             </div>

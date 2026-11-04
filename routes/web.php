@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactsController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\Post\CreateController;
 use App\Http\Controllers\Post\DestroyController;
@@ -13,6 +12,8 @@ use App\Http\Controllers\Post\StoreController;
 use App\Http\Controllers\Post\UpdateController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\Post\PostLikeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 Auth::routes();
@@ -20,15 +21,20 @@ Auth::routes();
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [MainController::class, 'index'])->name('main.index');
 
-    Route::group(['namespace' => 'App\Http\Controllers\Post'], function () {
-        Route::get('/posts', IndexController::class)->name('post.index');
-        Route::get('/posts/create', CreateController::class)->name('post.create');
-        Route::post('/posts', StoreController::class)->name('post.store');
-        Route::get('/posts/{post}', ShowController::class)->name('post.show');
-        Route::get('/posts/{post}/edit', EditController::class)->name('post.edit');
-        Route::patch('/posts/{post}', UpdateController::class)->name('post.update');
-        Route::delete('/posts/{post}', DestroyController::class)->name('post.delete');
-    });
+
+    Route::get('/posts', IndexController::class)->name('post.index');
+    Route::get('/posts/create', CreateController::class)->name('post.create');
+    Route::post('/posts', StoreController::class)->name('post.store');
+    Route::get('/posts/{post}', ShowController::class)->name('post.show');
+    Route::get('/posts/{post}/edit', EditController::class)->name('post.edit');
+    Route::patch('/posts/{post}', UpdateController::class)->name('post.update');
+    Route::delete('/posts/{post}', DestroyController::class)->name('post.delete');
+    Route::post('/posts/{post}/like', [PostLikeController::class, 'toggle'])
+        ->name('post.like');
+    Route::get('/posts/{post}/like-status', [\App\Http\Controllers\Post\PostLikeController::class, 'status'])
+        ->name('post.like.status');
+    Route::get('/likes/statuses', [PostLikeController::class, 'statuses'])->name('likes.statuses');
+
 
     Route::get('/posts/update', [PostController::class, 'update']);
     Route::get('/posts/delete', [PostController::class, 'delete']);
@@ -39,6 +45,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contacts', [ContactsController::class, 'index'])->name('contact.index');
     Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });

@@ -57,7 +57,7 @@
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             @foreach ($posts as $post)
-                @include('post.card', ['post' => $post])
+                @include('post.partials.card', ['post' => $post])
             @endforeach
         </div>
 

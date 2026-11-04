@@ -1,4 +1,5 @@
-<article class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-200 group flex flex-col">
+<article
+    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-200 group flex flex-col">
     <a href="{{ route('post.show', $post) }}" class="block">
         <div class="h-48 relative bg-gray-200 overflow-hidden">
             @if ($post->image)
@@ -50,25 +51,16 @@
         </p>
 
         <div class="mt-auto flex items-center justify-between text-xs text-gray-500 font-medium">
-            {{-- лайки: withCount('likes') даёт $post->likes_count --}}
-            <span class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                {{ $post->likes_count ?? 0 }}
-            </span>
+            @include('post.partials.like-button', ['post' => $post, 'size' => 'sm'])
 
-            {{-- количество комментариев, если подгружаешь withCount('comments') --}}
             @isset($post->comments_count)
                 <span class="flex items-center gap-1">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
+                    {{-- иконка комментария --}}
                     {{ $post->comments_count }}
                 </span>
             @endisset
+
+
         </div>
     </div>
 </article>
