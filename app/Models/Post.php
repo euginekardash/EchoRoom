@@ -14,9 +14,14 @@ class Post extends Model
 {
     use SoftDeletes, HasFactory, Filterable;
 
-    protected $fillable = ['title', 'content', 'image', 'is_published', 'category_id'];
+    protected $fillable = ['title', 'content', 'image', 'is_published', 'category_id', 'user_id'];
 
     protected $casts = ['is_published' => 'boolean'];
+
+    public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+}
 
     public function category(): BelongsTo
     {

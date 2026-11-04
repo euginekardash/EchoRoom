@@ -15,7 +15,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable ,Filterable;
+    use HasFactory, Notifiable, Filterable;
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +28,11 @@ class User extends Authenticatable
         'password',
         'image',
     ];
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
 
     public function comments(): HasMany
     {

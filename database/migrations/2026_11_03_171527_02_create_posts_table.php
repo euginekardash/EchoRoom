@@ -19,6 +19,9 @@ return new class extends Migration
             $table->boolean('is_published')->default(true);
             $table->timestamps();
             $table->softDeletes();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
 
             $table->foreignId('category_id')
                 ->nullable()
