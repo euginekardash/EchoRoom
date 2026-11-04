@@ -74,4 +74,90 @@
             </div>
         </div>
     </article>
+    {{-- ============ Comments ============ --}}
+<section class="max-w-3xl mx-auto mt-10">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+
+        {{-- Заголовок --}}
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Комментарии
+                <span class="text-sm font-normal text-gray-500">({{ $post->allComments->count() }})</span>
+            </h2>
+        </div>
+
+        {{-- Форма нового комментария --}}
+        @auth
+            <div class="p-6 border-b border-gray-100">
+                <form action="{{ route('comments.store', $post) }}" method="POST">
+                    @csrf
+                    <div class="flex gap-3">
+                        <div class="shrink-0">
+                            @if (auth()->user()->image && file_exists(storage_path('app/public/' . auth()->user()->image)))
+                                <img src="{{ asset('storage/' . auth()->user()->image) }}"
+                                     alt="{{ auth()->user()->name }}"
+                                     class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=3b82f6&color=fff&size=64"
+                                     alt="{{ auth()->user()->name }}"
+                                     class="w-9 h-9 rounded-full object-cover border border-gray-200">
+                            @endif
+                        </div>
+                        <div class="flex-1">
+                            <textarea name="content" rows="3" required
+                                      placeholder="Поделитесь мыслями..."
+                                      class="w-full px-4 py-3 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none">{{ old('content') }}</textarea>
+                            @error('content')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
+                            <div class="flex justify-end mt-2">
+                                <button type="submit"
+                                        class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition-colors">
+                                    Отправить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        @else
+            <div class="p-6 border-b border-gray-100 text-sm text-gray-600">
+                <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Войдите
+                </a>
+                , чтобы оставить комментарий.
+            </div>
+        @endauth
+
+        {{-- Список комментариев --}}
+        <div class="p-6">
+            @if ($post->comments->isEmpty())
+                <div class="text-center py-10">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    <p class="text-gray-500 font-medium">Пока нет комментариев</p>
+                    <p class="text-gray-400 text-sm mt-1">Будьте первым!</p>
+                </div>
+            @else
+                <div class="space-y-5">
+                    @foreach ($post->comments as $comment)
+                        @include('post.partials.comment', [
+                            'comment' => $comment,
+                            'post' => $post,
+                            'depth' => 0,
+                        ])
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </div>
+</section>
 @endsection

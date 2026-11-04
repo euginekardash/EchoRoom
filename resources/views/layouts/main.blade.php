@@ -170,6 +170,29 @@
             btn.classList.toggle('text-gray-500', !liked);
             btn.classList.toggle('hover:text-red-500', !liked);
         }
+        // ── Ответ на комментарий ──
+        document.addEventListener('click', (e) => {
+            // открыть
+            const openBtn = e.target.closest('.js-reply-toggle');
+            if (openBtn) {
+                const form = document.getElementById(openBtn.dataset.target);
+                if (form) {
+                    form.classList.remove('hidden');
+                    form.querySelector('textarea')?.focus();
+                }
+                return;
+            }
+
+            // закрыть
+            const closeBtn = e.target.closest('.js-reply-cancel');
+            if (closeBtn) {
+                const form = document.getElementById(closeBtn.dataset.target);
+                if (form) {
+                    form.classList.add('hidden');
+                    form.querySelector('textarea').value = '';
+                }
+            }
+        });
     </script>
 
 </body>

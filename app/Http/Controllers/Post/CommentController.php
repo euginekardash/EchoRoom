@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Post;
 
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+class CommentController extends BaseController
 {
     public function store(Request $request, Post $post)
     {
@@ -17,7 +17,7 @@ class CommentController extends Controller
 
         if (!empty($data['parent_id'])) {
             $parent = Comment::findOrFail($data['parent_id']);
-            abort_unless($parent->post_id === $post->id, 422);
+            abort_unless($parent->post_id === $post->id, 422, 'Parent comment belongs to another post');
         }
 
         $post->allComments()->create([
@@ -26,13 +26,20 @@ class CommentController extends Controller
             'content'   => $data['content'],
         ]);
 
-        return back();
+        return back()->with('status', 'Comment added.');
     }
 
-    public function destroy(Comment $comment)
+    public function destroy(Request $request, Comment $comment)
     {
-        abort_unless($comment->user_id === auth()->id || auth()->user->role === 'admin', 403);
+        $user = $request->user();
+
+        abort_unless(
+            $comment->user_id === $user->id || $user->role === 'admin',
+            403
+        );
+
         $comment->delete();
-        return back();
+
+        return back()->with('status', 'Comment deleted.');
     }
 }

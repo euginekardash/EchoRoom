@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\Post\CommentController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\Post\CreateController;
@@ -29,11 +30,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/posts/{post}/edit', EditController::class)->name('post.edit');
     Route::patch('/posts/{post}', UpdateController::class)->name('post.update');
     Route::delete('/posts/{post}', DestroyController::class)->name('post.delete');
+
     Route::post('/posts/{post}/like', [PostLikeController::class, 'toggle'])
         ->name('post.like');
     Route::get('/posts/{post}/like-status', [\App\Http\Controllers\Post\PostLikeController::class, 'status'])
         ->name('post.like.status');
     Route::get('/likes/statuses', [PostLikeController::class, 'statuses'])->name('likes.statuses');
+
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])
+        ->name('comments.store');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])
+        ->name('comments.destroy');
 
 
     Route::get('/posts/update', [PostController::class, 'update']);

@@ -11,9 +11,12 @@ class ShowController extends BaseController
     {
         $userId = $request->user()?->id;
 
-        $post->load('category')
-             ->loadCount('likes')
-             ->loadExists(['likes as is_liked' => fn ($q) => $q->where('users.id', $userId)]);
+        $post->load([
+            'category',
+            'comments' => fn($q) => $q->with(['user', 'replies.user'])->latest(),
+        ])
+            ->loadCount('likes')
+            ->loadExists(['likes as is_liked' => fn($q) => $q->where('users.id', $userId)]);
 
         return view('post.show', compact('post'));
     }
